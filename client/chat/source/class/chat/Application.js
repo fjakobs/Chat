@@ -63,6 +63,20 @@ qx.Class.define("chat.Application",
       
       container.setLayout(new qx.ui.layout.VBox());
       
+      // HEADER
+      var header = new qx.ui.container.Composite();
+      header.setLayout(new qx.ui.layout.HBox);
+      header.setAppearance("app-header");
+
+      var title = new qx.ui.basic.Label("Chat");
+      var version = new qx.ui.basic.Label("qooxdoo " + qx.core.Setting.get("qx.version"));
+
+      header.add(title);
+      header.add(new qx.ui.core.Spacer, {flex : 1});
+      header.add(version);    
+      container.add(header);  
+      
+      // CHAT
       this.__chat = new qx.ui.embed.Html();
       this.__chat.set({
         backgroundColor: "white",
@@ -70,7 +84,9 @@ qx.Class.define("chat.Application",
       });
       container.add(this.__chat, {flex: 1});
       
+      // INPUT
       var input = new qx.ui.form.TextField();
+      input.setPlaceholder("Enter your message here...");
       container.add(input);
       input.addListener("changeValue", function() {
         var msg = input.getValue();
@@ -84,8 +100,9 @@ qx.Class.define("chat.Application",
         req.open("GET", "http://127.0.0.1:8000?post=" + msg);
         req.send();
       }, this);
-     
-      this.createRequest();            
+      
+      // long AJAX polling
+      this.createRequest();
     },
     
     
